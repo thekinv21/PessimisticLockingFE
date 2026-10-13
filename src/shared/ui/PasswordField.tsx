@@ -4,7 +4,7 @@ import type { ComponentProps } from 'react'
 
 import { Eye, EyeOff } from 'lucide-react'
 
-import { useToggle } from '@/shared/lib/hooks'
+import { useToggle } from '@/shared/lib'
 
 import { TextField } from './TextField'
 

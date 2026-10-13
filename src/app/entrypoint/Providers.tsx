@@ -3,6 +3,7 @@
 import { ReactNode, useState } from 'react'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Provider as JotaiProvider } from 'jotai'
 
 type TProvidersProps = {
 	children: ReactNode
@@ -22,6 +23,8 @@ export const Providers = ({ children }: TProvidersProps) => {
 	)
 
 	return (
-		<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+		<JotaiProvider>
+			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+		</JotaiProvider>
 	)
 }
