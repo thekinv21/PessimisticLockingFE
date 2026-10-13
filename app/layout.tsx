@@ -38,10 +38,8 @@ export default async function RootLayout({ children }: TRootLayoutProps) {
 			className={`${manrope.variable} ${golos.variable} ${jetbrainsMono.variable} h-full`}
 			suppressHydrationWarning
 		>
-			<body className='min-h-full' suppressHydrationWarning>
-				<>
-					<main>{children}</main>
-				</>
+			<body className='min-h-full w-full' suppressHydrationWarning>
+				<>{children}</>
 			</body>
 		</html>
 	)
