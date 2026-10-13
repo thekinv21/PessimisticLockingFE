@@ -1,2 +1,2 @@
 export { AUTH_COOKIES } from './cookies'
-export { API_URL, IS_PRODUCTION, STORAGE_SECRET } from './env'
+export { API_PROXY_PATH, API_URL, IS_PRODUCTION, STORAGE_SECRET } from './env'

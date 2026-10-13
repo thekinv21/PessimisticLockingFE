@@ -9,6 +9,14 @@ export type TPaginationMeta = {
 	hasPrevious: boolean
 }
 
+export type TApiQueryParams = {
+	offset: number
+	limit: number
+	searchTerm?: string
+	sortBy?: 'asc' | 'desc'
+	isActive?: boolean
+}
+
 type TBaseApiResponse = {
 	statusCode: number
 	timestamp: string

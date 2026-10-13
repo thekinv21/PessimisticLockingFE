@@ -19,10 +19,20 @@ const COOKIE_OPTIONS = {
 
 /**
  * The access cookie is dropped a bit early, so the token never expires
- * mid-request.
+ * mid-request: 10% of its lifetime, at most 30 seconds.
  */
 
-const ACCESS_COOKIE_EARLY_EXPIRY_MS: number = 30_000
+const MAX_EARLY_EXPIRY_MS: number = 30_000
+
+function accessCookieExpiresAt(accessTokenExpireAt: string) {
+	const expireAt = Date.parse(accessTokenExpireAt)
+	const earlyExpiry = Math.min(
+		MAX_EARLY_EXPIRY_MS,
+		(expireAt - Date.now()) / 10,
+	)
+
+	return new Date(expireAt - earlyExpiry)
+}
 
 type TCookieWriter = Pick<NextResponse['cookies'], 'set'>
 
@@ -30,11 +40,9 @@ export function writeAuthCookies(
 	cookieStore: TCookieWriter,
 	tokens: TAuthTokens,
 ) {
-	const accessTokenExpireAt = Date.parse(tokens.accessTokenExpireAt)
-
 	cookieStore.set(AUTH_COOKIES.accessToken, tokens.accessToken, {
 		...COOKIE_OPTIONS,
-		expires: new Date(accessTokenExpireAt - ACCESS_COOKIE_EARLY_EXPIRY_MS),
+		expires: accessCookieExpiresAt(tokens.accessTokenExpireAt),
 	})
 	cookieStore.set(AUTH_COOKIES.refreshToken, tokens.refreshToken, {
 		...COOKIE_OPTIONS,
