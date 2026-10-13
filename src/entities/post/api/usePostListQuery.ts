@@ -10,7 +10,6 @@ import {
 } from '@/shared/api'
 
 import type { TPost } from '../model/types'
-
 import { postKeys } from './postKeys'
 
 export function usePostListQuery(params: TApiQueryParams) {

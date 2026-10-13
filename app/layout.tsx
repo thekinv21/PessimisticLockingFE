@@ -5,6 +5,8 @@ import { Golos_Text, JetBrains_Mono, Manrope } from 'next/font/google'
 
 import { Providers } from '@/app/entrypoint'
 
+import { APP_NAME } from '@/shared/config'
+
 import './globals.css'
 
 const manrope = Manrope({
@@ -27,10 +29,10 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
 	title: {
-		default: 'Pessimistic Locking',
-		template: '%s · Pessimistic Locking',
+		default: APP_NAME,
+		template: `%s · ${APP_NAME}`,
 	},
-	description: 'Pessimistic Locking',
+	description: APP_NAME,
 }
 
 type TRootLayoutProps = {

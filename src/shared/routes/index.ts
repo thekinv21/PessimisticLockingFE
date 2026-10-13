@@ -3,6 +3,10 @@ export const ROUTES = {
 	login: '/login',
 	register: '/register',
 	forgotPassword: '/forgot-password',
+	profile: '/profile',
+	users: '/users',
+	roles: '/roles',
+	posts: '/posts',
 } as const
 
 export const SESSION_EXPIRED_PARAM = {
