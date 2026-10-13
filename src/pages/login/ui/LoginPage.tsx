@@ -1,9 +1,9 @@
 import Link from 'next/link'
 
-import { LoginForm } from '@/features/auth'
-
 import { ROUTES } from '@/shared/routes'
 import { Logo } from '@/shared/ui'
+
+import { LoginForm } from './LoginForm'
 
 export function LoginPage() {
 	return (

@@ -6,7 +6,9 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "eslint",
+		"lint": "eslint && steiger ./src",
+		"lint:fix": "eslint --fix && steiger ./src",
+		"lint:fsd": "steiger ./src",
 		"format": "prettier --write \"{app,src}/**/*.{ts,tsx}\"",
 		"format:check": "prettier --check \"{app,src}/**/*.{ts,tsx}\"",
 		"prepare": "husky"
