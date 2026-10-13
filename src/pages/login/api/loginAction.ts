@@ -1,5 +1,7 @@
 'use server'
 
+import { unstable_rethrow } from 'next/navigation'
+
 import { isAxiosError } from 'axios'
 
 import {
@@ -35,6 +37,8 @@ export async function loginAction(
 
 		return { ok: true, user }
 	} catch (error) {
+		unstable_rethrow(error)
+
 		if (isAxiosError<TApiErrorResponse>(error) && error.response?.data) {
 			return { ok: false, message: error.response.data.message }
 		}

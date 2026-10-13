@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
 import { AUTH_COOKIES } from '@/shared/config'
-import { ROUTES } from '@/shared/routes'
+import { ROUTES, SESSION_EXPIRED_PARAM } from '@/shared/routes'
 
 const AUTH_ROUTES: string[] = [
 	ROUTES.login,
@@ -9,18 +9,34 @@ const AUTH_ROUTES: string[] = [
 	ROUTES.forgotPassword,
 ]
 
-export function proxy(request: NextRequest) {
-	const { pathname } = request.nextUrl
+function clearAuthCookies(response: NextResponse) {
+	response.cookies.delete(AUTH_COOKIES.accessToken)
+	response.cookies.delete(AUTH_COOKIES.refreshToken)
+	return response
+}
 
-	const isAuthenticated = request.cookies.has(AUTH_COOKIES.accessToken)
+export function proxy(request: NextRequest) {
+	const { pathname, searchParams } = request.nextUrl
 
 	const isAuthRoute = AUTH_ROUTES.includes(pathname)
 
-	if (!isAuthenticated && !isAuthRoute) {
-		return NextResponse.redirect(new URL(ROUTES.login, request.url))
+	const isSessionExpired =
+		searchParams.get(SESSION_EXPIRED_PARAM.key) === SESSION_EXPIRED_PARAM.value
+
+	const isAuthenticated =
+		!isSessionExpired &&
+		request.cookies.has(AUTH_COOKIES.accessToken) &&
+		request.cookies.has(AUTH_COOKIES.refreshToken)
+
+	if (!isAuthenticated) {
+		const response = isAuthRoute
+			? NextResponse.next()
+			: NextResponse.redirect(new URL(ROUTES.login, request.url))
+
+		return clearAuthCookies(response)
 	}
 
-	if (isAuthenticated && isAuthRoute) {
+	if (isAuthRoute) {
 		return NextResponse.redirect(new URL(ROUTES.home, request.url))
 	}
 
