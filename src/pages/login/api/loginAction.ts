@@ -6,6 +6,7 @@ import { isAxiosError } from 'axios'
 
 import {
 	instance,
+	PUBLIC_ENDPOINTS,
 	type TApiErrorResponse,
 	type TApiResponse,
 } from '@/shared/api'
@@ -25,7 +26,7 @@ export async function loginAction(
 	try {
 		const { data: response } = await instance.post<
 			TApiResponse<TLoginResponse>
-		>('/v1/auth/login', parsed.data)
+		>(PUBLIC_ENDPOINTS.login, parsed.data)
 
 		if (!response.data) {
 			return { ok: false, message: 'Something went wrong. Try again.' }

@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers'
+import type { NextResponse } from 'next/server'
 
 import { AUTH_COOKIES, IS_PRODUCTION } from '@/shared/config'
 
@@ -17,21 +18,32 @@ const COOKIE_OPTIONS = {
 } as const
 
 /**
- * Server-only: call from Server Actions, Route Handlers or
- * Server Components.
- * */
+ * The access cookie is dropped a bit early, so the token never expires
+ * mid-request.
+ */
 
-export async function setAuthCookies(tokens: TAuthTokens) {
-	const cookieStore = await cookies()
+const ACCESS_COOKIE_EARLY_EXPIRY_MS: number = 30_000
+
+type TCookieWriter = Pick<NextResponse['cookies'], 'set'>
+
+export function writeAuthCookies(
+	cookieStore: TCookieWriter,
+	tokens: TAuthTokens,
+) {
+	const accessTokenExpireAt = Date.parse(tokens.accessTokenExpireAt)
 
 	cookieStore.set(AUTH_COOKIES.accessToken, tokens.accessToken, {
 		...COOKIE_OPTIONS,
-		expires: new Date(tokens.accessTokenExpireAt),
+		expires: new Date(accessTokenExpireAt - ACCESS_COOKIE_EARLY_EXPIRY_MS),
 	})
 	cookieStore.set(AUTH_COOKIES.refreshToken, tokens.refreshToken, {
 		...COOKIE_OPTIONS,
 		expires: new Date(tokens.refreshTokenExpireAt),
 	})
+}
+
+export async function setAuthCookies(tokens: TAuthTokens) {
+	writeAuthCookies(await cookies(), tokens)
 }
 
 export async function getAuthCookies() {

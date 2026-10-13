@@ -5,7 +5,6 @@ export const ROUTES = {
 	forgotPassword: '/forgot-password',
 } as const
 
-/** Added to the login URL when a request returned 401; the proxy clears auth cookies on it. */
 export const SESSION_EXPIRED_PARAM = {
 	key: 'session',
 	value: 'expired',
