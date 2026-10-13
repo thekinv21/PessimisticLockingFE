@@ -42,7 +42,7 @@ export function LoginForm() {
 				{...register('password')}
 			/>
 			<div className='flex items-center justify-between gap-4'>
-				<Checkbox label='Remember me' {...register('rememberMe')} />
+				<Checkbox label='Remember me' />
 				<Link
 					href={ROUTES.forgotPassword}
 					className='rounded font-semibold text-brand hover:text-brand-strong hover:underline'

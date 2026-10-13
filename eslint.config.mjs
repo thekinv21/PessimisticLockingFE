@@ -38,10 +38,10 @@ const eslintConfig = defineConfig([
 								to: { element: { types: { anyOf: layersBelow(layer) } } },
 							},
 						})),
-						{
-							from: { element: { type: 'shared' } },
-							allow: { to: { element: { type: 'shared' } } },
-						},
+						...['app', 'shared'].map(layer => ({
+							from: { element: { type: layer } },
+							allow: { to: { element: { type: layer } } },
+						})),
 						{
 							disallow: {
 								to: { element: { fileInternalPath: '!**/index.{ts,tsx}' } },

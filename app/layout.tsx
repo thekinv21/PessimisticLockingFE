@@ -1,5 +1,9 @@
+import { ReactNode } from 'react'
+
 import type { Metadata } from 'next'
 import { Golos_Text, JetBrains_Mono, Manrope } from 'next/font/google'
+
+import { Providers } from '@/app/entrypoint'
 
 import './globals.css'
 
@@ -29,7 +33,9 @@ export const metadata: Metadata = {
 	description: 'Pessimistic Locking',
 }
 
-type TRootLayoutProps = LayoutProps<'/'>
+type TRootLayoutProps = {
+	children: ReactNode
+}
 
 export default async function RootLayout({ children }: TRootLayoutProps) {
 	return (
@@ -39,7 +45,7 @@ export default async function RootLayout({ children }: TRootLayoutProps) {
 			suppressHydrationWarning
 		>
 			<body className='min-h-full w-full' suppressHydrationWarning>
-				<>{children}</>
+				<Providers>{children}</Providers>
 			</body>
 		</html>
 	)
