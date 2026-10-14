@@ -40,6 +40,18 @@ If the holder loses the lock (expired, disconnected), the edit form shows why an
 The socket authenticates with the user's access token, read on the server from an httpOnly cookie
 (`getLockToken` server action).
 
+## Post list
+
+- **Fixed page, scrolling list.** The app layout fills the screen (`h-dvh`). The top bar and the _Posts_
+  heading stay in place; only the list scrolls, inside its own container, with the scrollbar at the screen edge.
+- **Infinite loading.** Posts come from `GET /v1/posts` with `offset` / `limit`. The page size is the number
+  of rows that fit in the viewport, and the next page loads as soon as the end of the list comes into view.
+  If it fails, a _Try again_ button appears at the bottom.
+- **Virtualized.** `@tanstack/react-virtual` renders only the visible rows, using the list container as the
+  scroll element, so long lists stay fast.
+- **Grouped by day.** Posts are sorted by last edit and grouped under _Today_, _Yesterday_, _This week_ and
+  _Earlier_. Each group shows how many posts it holds.
+
 ## Screenshots
 
 | Sign in                             | Post detail                                   |
@@ -119,7 +131,7 @@ src/
   app/                   Providers and app layout
   pages/
     login/               Sign-in form
-    posts/               Infinite, virtualized post list grouped by day; the list scrolls, the page stays fixed
+    posts/               Infinite, virtualized post list grouped by day
     post-detail/         Post view, edit form, lock overlay, lock socket
   entities/
     post/                Post types and TanStack Query hooks
