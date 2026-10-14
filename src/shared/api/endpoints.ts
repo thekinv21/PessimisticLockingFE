@@ -6,4 +6,5 @@ export const PUBLIC_ENDPOINTS = {
 
 export const PRIVATE_ENDPOINTS = {
 	list_of_posts: '/v1/posts',
+	post_by_id: (id: number) => `/v1/posts/${id}`,
 } as const

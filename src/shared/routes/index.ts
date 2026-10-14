@@ -1,12 +1,9 @@
 export const ROUTES = {
-	home: '/dashboard',
+	home: '/',
 	login: '/login',
 	register: '/register',
 	forgotPassword: '/forgot-password',
-	profile: '/profile',
-	users: '/users',
-	roles: '/roles',
-	posts: '/posts',
+	post: (id: number) => `/posts/${id}`,
 } as const
 
 export const SESSION_EXPIRED_PARAM = {

@@ -8,9 +8,4 @@ export default defineConfig([
 		files: ['./src/entities/user/**'],
 		rules: { 'fsd/insignificant-slice': 'off' },
 	},
-	{
-		// Post list query is shared by dashboard and upcoming post pages.
-		files: ['./src/entities/post/**'],
-		rules: { 'fsd/insignificant-slice': 'off' },
-	},
 ])
