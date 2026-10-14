@@ -2,17 +2,8 @@ import Link from 'next/link'
 
 import { ChevronRight } from 'lucide-react'
 
-import { cn } from '@/shared/lib'
-
-import type { TPostRow, TPostTone } from '../model/usePostGroups'
-
-const TONE_CLASSES: Record<TPostTone, string> = {
-	brand: 'bg-brand-soft text-brand-strong',
-	highlight: 'bg-highlight-soft text-highlight',
-	info: 'bg-info-soft text-info',
-	success: 'bg-success-soft text-success',
-	warning: 'bg-warning-soft text-warning',
-}
+import type { TPostRow } from '../model/usePostGroups'
+import { PostMonogram } from './PostMonogram'
 
 type TPostRowProps = { row: TPostRow }
 
@@ -28,15 +19,7 @@ export function PostRow({ row }: TPostRowProps) {
 					aria-hidden
 					className='absolute inset-y-3 left-0 w-0.75 rounded-r-full bg-brand opacity-0 transition-opacity group-hover:opacity-100'
 				/>
-				<span
-					aria-hidden
-					className={cn(
-						'grid size-10 shrink-0 place-items-center rounded-xl font-display text-base font-extrabold',
-						TONE_CLASSES[row.tone],
-					)}
-				>
-					{row.initial}
-				</span>
+				<PostMonogram id={row.id} title={row.title} />
 				<div className='min-w-0 grow'>
 					<p className='truncate font-display text-base leading-6 font-bold text-ink max-mobile:line-clamp-2 max-mobile:whitespace-normal'>
 						{row.title}

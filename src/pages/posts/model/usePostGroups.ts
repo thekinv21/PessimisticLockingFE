@@ -7,10 +7,6 @@ import { ROUTES } from '@/shared/routes'
 
 import { groupByDay } from '../lib/groupByDay'
 
-const TONES = ['brand', 'highlight', 'info', 'success', 'warning'] as const
-
-export type TPostTone = (typeof TONES)[number]
-
 const timeFormatter = new Intl.DateTimeFormat('en', { timeStyle: 'short' })
 
 const dateFormatter = new Intl.DateTimeFormat('en', {
@@ -37,8 +33,6 @@ export function usePostGroups() {
 			id: post.id,
 			href: ROUTES.post(post.id),
 			title: post.title,
-			initial: post.title.trim().charAt(0).toUpperCase() || '#',
-			tone: TONES[post.id % TONES.length],
 			description: post.description,
 			updatedAt: post.updatedAt,
 			editedAt: formatEditedAt(post.updatedAt),
