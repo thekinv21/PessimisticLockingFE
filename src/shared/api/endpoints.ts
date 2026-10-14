@@ -8,3 +8,5 @@ export const PRIVATE_ENDPOINTS = {
 	list_of_posts: '/v1/posts',
 	post_by_id: (id: number) => `/v1/posts/${id}`,
 } as const
+
+export const LOCK_TOKEN_HEADER = 'x-lock-token'

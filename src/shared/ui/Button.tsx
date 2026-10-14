@@ -39,7 +39,7 @@ export function Button(props: TButtonProps) {
 			disabled={pending || disabled}
 			aria-busy={pending}
 			className={cn(
-				'inline-flex items-center justify-center gap-2 rounded-xl font-display font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus active:translate-y-px disabled:cursor-progress disabled:opacity-80',
+				'inline-flex items-center justify-center gap-2 rounded-xl font-display font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50 aria-busy:cursor-progress aria-busy:opacity-80',
 				VARIANTS[variant],
 				SIZES[size],
 				className,

@@ -4,26 +4,10 @@ import { useState } from 'react'
 
 import { useRouter } from 'next/navigation'
 
-import { isAxiosError } from 'axios'
-
 import { useDeletePostMutation } from '@/entities/post'
 
-import type { TApiErrorResponse } from '@/shared/api'
+import { getApiErrorMessage } from '@/shared/api'
 import { ROUTES } from '@/shared/routes'
-
-const HTTP_LOCKED = 423
-
-const FALLBACK_MESSAGE = 'The post wasn’t deleted. Try again.'
-
-function toErrorMessage(error: Error) {
-	if (!isAxiosError<TApiErrorResponse>(error)) return FALLBACK_MESSAGE
-
-	if (error.response?.status === HTTP_LOCKED) {
-		return 'Someone is editing this post right now. Delete it once they finish.'
-	}
-
-	return error.response?.data.message ?? FALLBACK_MESSAGE
-}
 
 export function useDeletePost(id: number) {
 	const [isOpen, setIsOpen] = useState(false)
@@ -48,7 +32,9 @@ export function useDeletePost(id: number) {
 		close,
 		confirm,
 		isPending,
-		errorMessage: error ? toErrorMessage(error) : null,
+		errorMessage: error
+			? getApiErrorMessage(error, 'The post wasn’t deleted. Try again.')
+			: null,
 	}
 }
 

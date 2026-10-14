@@ -1,5 +1,6 @@
 export { Button } from './Button'
 export { Checkbox } from './Checkbox'
+export { ErrorState } from './ErrorState'
 export { Logo } from './Logo'
 export { LogoMark } from './LogoMark'
 export { PasswordField } from './PasswordField'
