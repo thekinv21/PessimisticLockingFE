@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
-import { useWindowVirtualizer } from '@tanstack/react-virtual'
+import { useVirtualizer } from '@tanstack/react-virtual'
 
 import { ROW_HEIGHT, type TPostListItem } from './usePostList'
 
@@ -29,15 +29,14 @@ export function usePostVirtualList(params: TUsePostVirtualListParams) {
 		loadMore,
 	} = params
 
-	const [listElement, setListElement] = useState<HTMLDivElement | null>(null)
-	const scrollMargin = listElement?.offsetTop ?? 0
+	const scrollRef = useRef<HTMLDivElement>(null)
 
-	const virtualizer = useWindowVirtualizer({
+	const virtualizer = useVirtualizer({
 		count: hasNextPage ? items.length + 1 : items.length,
+		getScrollElement: () => scrollRef.current,
 		estimateSize: index => estimateSize(items[index]),
 		getItemKey: index => items[index]?.key ?? 'loader',
 		overscan: 6,
-		scrollMargin,
 	})
 
 	const virtualItems = virtualizer.getVirtualItems()
@@ -58,10 +57,9 @@ export function usePostVirtualList(params: TUsePostVirtualListParams) {
 	])
 
 	return {
-		listRef: setListElement,
+		scrollRef,
 		totalSize: virtualizer.getTotalSize(),
 		virtualItems,
-		scrollMargin,
 		measureElement: virtualizer.measureElement,
 	}
 }

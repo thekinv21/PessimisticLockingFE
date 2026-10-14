@@ -7,7 +7,7 @@ import { useSetAtom } from 'jotai'
 
 import { type TUser, userAtom } from '@/entities/user'
 
-import { ROUTES } from '@/shared/routes'
+import { getSafeRedirectPath, REDIRECT_PARAM } from '@/shared/routes'
 
 import type { TLoginValues } from '../model/loginSchema'
 import { loginAction } from './loginAction'
@@ -34,7 +34,10 @@ export function useLoginMutation() {
 		},
 		onSuccess: async user => {
 			await setUser(user)
-			router.replace(ROUTES.home)
+
+			const searchParams = new URLSearchParams(window.location.search)
+
+			router.replace(getSafeRedirectPath(searchParams.get(REDIRECT_PARAM)))
 		},
 	})
 }

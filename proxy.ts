@@ -1,19 +1,23 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
 import { API_PROXY_PATH, API_URL, AUTH_COOKIES } from '@/shared/config'
-import { ROUTES, SESSION_EXPIRED_PARAM } from '@/shared/routes'
+import {
+	AUTH_ROUTES,
+	buildLoginUrl,
+	getSafeRedirectPath,
+	REDIRECT_PARAM,
+	SESSION_EXPIRED_PARAM,
+} from '@/shared/routes'
 import { refreshAuthTokens, writeAuthCookies } from '@/shared/session'
 
-const AUTH_ROUTES: string[] = [
-	ROUTES.login,
-	ROUTES.register,
-	ROUTES.forgotPassword,
-]
-
 function guestResponse(request: NextRequest, isAuthRoute: boolean) {
+	const { pathname, search } = request.nextUrl
+
+	const loginUrl = buildLoginUrl({ redirectTo: `${pathname}${search}` })
+
 	const response = isAuthRoute
 		? NextResponse.next()
-		: NextResponse.redirect(new URL(ROUTES.login, request.url))
+		: NextResponse.redirect(new URL(loginUrl, request.url))
 
 	response.cookies.delete(AUTH_COOKIES.accessToken)
 	response.cookies.delete(AUTH_COOKIES.refreshToken)
@@ -22,9 +26,15 @@ function guestResponse(request: NextRequest, isAuthRoute: boolean) {
 }
 
 function userResponse(request: NextRequest, isAuthRoute: boolean) {
-	return isAuthRoute
-		? NextResponse.redirect(new URL(ROUTES.home, request.url))
-		: NextResponse.next({ request: { headers: request.headers } })
+	if (!isAuthRoute) {
+		return NextResponse.next({ request: { headers: request.headers } })
+	}
+
+	const redirectTo = getSafeRedirectPath(
+		request.nextUrl.searchParams.get(REDIRECT_PARAM),
+	)
+
+	return NextResponse.redirect(new URL(redirectTo, request.url))
 }
 
 function forwardToApi(request: NextRequest, accessToken?: string) {

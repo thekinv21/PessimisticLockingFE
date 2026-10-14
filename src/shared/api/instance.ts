@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import axios, { isAxiosError } from 'axios'
 
 import { API_PROXY_PATH, API_URL } from '@/shared/config'
-import { SESSION_EXPIRED_URL } from '@/shared/routes'
+import { buildLoginUrl } from '@/shared/routes'
 
 import { PUBLIC_ENDPOINTS } from './endpoints'
 
@@ -27,9 +27,16 @@ instance.interceptors.response.use(
 
 		if (!isUnauthorized) return Promise.reject(error)
 
-		if (!isBrowser) redirect(SESSION_EXPIRED_URL)
+		if (!isBrowser) redirect(buildLoginUrl({ isSessionExpired: true }))
 
-		window.location.replace(SESSION_EXPIRED_URL)
+		const { pathname, search } = window.location
+
+		window.location.replace(
+			buildLoginUrl({
+				redirectTo: `${pathname}${search}`,
+				isSessionExpired: true,
+			}),
+		)
 
 		return new Promise<never>(() => {})
 	},
