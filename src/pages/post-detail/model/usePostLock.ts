@@ -18,6 +18,7 @@ import {
 	type TLockTarget,
 	type TRecordChanged,
 } from '../api/lockSocket'
+import { toInitials } from '../lib/toInitials'
 
 const ACK_TIMEOUT_MS = 5_000
 
@@ -140,9 +141,12 @@ export function usePostLock(postId: number, socket: TLockSocket) {
 		if (tokenRef.current) socket.emit(LOCK_EVENT.renew, target)
 	}
 
+	const lockedBy = lock && !token ? lock.holder.fullName : null
+
 	return {
 		token,
-		lockedBy: lock && !token ? lock.holder.fullName : null,
+		lockedBy,
+		lockedByInitials: lockedBy ? toInitials(lockedBy) : null,
 		lostReason,
 		deletedBy,
 		acquire,

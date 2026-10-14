@@ -2,14 +2,22 @@ import Link from 'next/link'
 
 import { ChevronRight } from 'lucide-react'
 
-import type { TPostRow } from '../model/usePostGroups'
+import { cn } from '@/shared/lib'
+
+import type { TPostRow } from '../model/usePostList'
 import { PostMonogram } from './PostMonogram'
 
-type TPostRowProps = { row: TPostRow }
+type TPostRowProps = { row: TPostRow; isFirst: boolean; isLast: boolean }
 
-export function PostRow({ row }: TPostRowProps) {
+export function PostRow({ row, isFirst, isLast }: TPostRowProps) {
 	return (
-		<li>
+		<div
+			className={cn(
+				'overflow-hidden border-x border-t border-line bg-surface',
+				isFirst && 'rounded-t-2xl',
+				isLast && 'rounded-b-2xl border-b shadow-clay-sm',
+			)}
+		>
 			<Link
 				href={row.href}
 				title={row.editedAgo}
@@ -41,6 +49,6 @@ export function PostRow({ row }: TPostRowProps) {
 					aria-hidden
 				/>
 			</Link>
-		</li>
+		</div>
 	)
 }

@@ -8,7 +8,7 @@ import { InlineAlert } from './InlineAlert'
 import { PostActions } from './PostActions'
 import { PostByline } from './PostByline'
 import { PostEditForm } from './PostEditForm'
-import { PostLockBanner } from './PostLockBanner'
+import { PostLockOverlay } from './PostLockOverlay'
 import { PostView } from './PostView'
 
 type TPostDetailContentProps = {
@@ -19,31 +19,40 @@ type TPostDetailContentProps = {
 export function PostDetailContent({ post, page }: TPostDetailContentProps) {
 	const { detail, lock, editing, deletion } = page
 
+	const isLocked: boolean = !!lock.lockedBy
+
 	return (
 		<>
-			{lock.lockedBy && <PostLockBanner holderName={lock.lockedBy} />}
-			{editing.isEditing ? (
-				<PostEditForm editing={editing} />
-			) : (
-				<PostView
-					post={post}
-					editedText={detail.editedText}
-					actions={
-						<PostActions
-							isLocked={!!lock.lockedBy}
-							isStarting={editing.isStarting}
-							onEdit={editing.start}
-							onDelete={deletion.open}
-						/>
-					}
+			<div inert={isLocked}>
+				{editing.isEditing ? (
+					<PostEditForm editing={editing} />
+				) : (
+					<PostView
+						post={post}
+						editedText={detail.editedText}
+						actions={
+							<PostActions
+								isLocked={isLocked}
+								isStarting={editing.isStarting}
+								onEdit={editing.start}
+								onDelete={deletion.open}
+							/>
+						}
+					/>
+				)}
+				{editing.startError && (
+					<div className='mt-6'>
+						<InlineAlert>{editing.startError}</InlineAlert>
+					</div>
+				)}
+				{detail.byline && <PostByline byline={detail.byline} />}
+			</div>
+			{lock.lockedBy && (
+				<PostLockOverlay
+					holderName={lock.lockedBy}
+					holderInitials={lock.lockedByInitials ?? ''}
 				/>
 			)}
-			{editing.startError && (
-				<div className='mt-6'>
-					<InlineAlert>{editing.startError}</InlineAlert>
-				</div>
-			)}
-			{detail.byline && <PostByline byline={detail.byline} />}
 			<DeletePostDialog postTitle={post.title} deletion={deletion} />
 		</>
 	)

@@ -2,14 +2,15 @@
 
 import { ErrorState } from '@/shared/ui'
 
-import { usePostGroups } from '../model/usePostGroups'
-import { PostGroup } from './PostGroup'
+import { usePostList } from '../model/usePostList'
+import { PostList } from './PostList'
 import { PostListEmpty } from './PostListEmpty'
 import { PostListSkeleton } from './PostListSkeleton'
 import { PostsHeader } from './PostsHeader'
 
 export function PostsPage() {
-	const { groups, total, isPending, isError, isEmpty, retry } = usePostGroups()
+	const { items, total, isPending, isError, isEmpty, retry, ...pagination } =
+		usePostList()
 
 	return (
 		<main className='mx-auto w-full max-w-4xl animate-rise px-6 pt-10 pb-16 max-mobile:px-4 max-mobile:pt-6'>
@@ -23,9 +24,7 @@ export function PostsPage() {
 					/>
 				)}
 				{isEmpty && <PostListEmpty />}
-				{groups.map(group => (
-					<PostGroup key={group.label} group={group} />
-				))}
+				{items.length > 0 && <PostList items={items} {...pagination} />}
 			</div>
 		</main>
 	)

@@ -4,6 +4,8 @@ import { usePostQuery } from '@/entities/post'
 
 import { formatRelativeTime } from '@/shared/lib'
 
+import { toInitials } from '../lib/toInitials'
+
 const dateFormatter = new Intl.DateTimeFormat('en', {
 	dateStyle: 'medium',
 	timeStyle: 'short',
@@ -13,14 +15,6 @@ const formatDate = (value: string) => dateFormatter.format(new Date(value))
 
 const shortenId = (value: string) =>
 	value.length > 14 ? `${value.slice(0, 8)}…${value.slice(-4)}` : value
-
-const toInitials = (name: string) =>
-	name
-		.split(/\s+/)
-		.filter(Boolean)
-		.slice(0, 2)
-		.map(word => word.charAt(0).toUpperCase())
-		.join('')
 
 export function usePostDetail(id: number) {
 	const { data: post, isPending, isError, refetch } = usePostQuery(id)

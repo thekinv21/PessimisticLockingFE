@@ -2,13 +2,24 @@ import Link from 'next/link'
 
 import { ArrowLeft } from 'lucide-react'
 
+import { cn } from '@/shared/lib'
 import { ROUTES } from '@/shared/routes'
 
-export function BackLink() {
+const TONES = {
+	default: 'text-ink-muted hover:text-ink',
+	inverse: 'text-white/80 hover:text-white',
+}
+
+type TBackLinkProps = { tone?: keyof typeof TONES }
+
+export function BackLink({ tone = 'default' }: TBackLinkProps) {
 	return (
 		<Link
 			href={ROUTES.home}
-			className='inline-flex w-fit items-center gap-1.5 rounded font-semibold text-ink-muted hover:text-ink'
+			className={cn(
+				'inline-flex w-fit items-center gap-1.5 rounded font-semibold',
+				TONES[tone],
+			)}
 		>
 			<ArrowLeft className='size-4' aria-hidden />
 			All posts

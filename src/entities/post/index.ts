@@ -2,7 +2,7 @@ export {
 	postKeys,
 	type TUpdatePostValues,
 	useDeletePostMutation,
-	usePostListQuery,
+	usePostListInfiniteQuery,
 	usePostQuery,
 	useUpdatePostMutation,
 } from './api'
